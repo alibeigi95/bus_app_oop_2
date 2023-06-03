@@ -6,8 +6,6 @@ BusStation busStation = BusStation(buses: [], travel: []);
 
 void main(List<String> arguments) {
 
-
-
   while (true) {
     MenuOperations busMenu = getMenu();
     mainMenu(menu: busMenu);
@@ -39,30 +37,23 @@ void mainMenu({required MenuOperations menu}) {
 
   switch (menu) {
     case MenuOperations.insertBus:
-
       busStation.addBuses();
       print(busStation.buses);
-
       break;
     case MenuOperations.definitionTravel:
-
       busStation.addTravel();
-      print(busStation.travel![0].price);
-      print(busStation.travel![0].bus);
-      print(busStation.travel![0].seats);
-      print(busStation.travel![0].travelDetails);
       break;
     case MenuOperations.reserveTicket:
-      print(menu.title);
+      busStation.reserveTicket();
       break;
     case MenuOperations.buyTicket:
-      print(menu.title);
+      busStation.buyTicket();
       break;
     case MenuOperations.previewBus:
-      print(menu.title);
+      busStation.previewBus();
       break;
     case MenuOperations.cancelTicket:
-      print(menu.title);
+      busStation.cancelTicket();
       break;
     case MenuOperations.getReports:
       print(menu.title);
