@@ -14,7 +14,58 @@ class BusStation {
 
   BusStation({required this.buses, required this.travel});
 
-  void cancelTicket(){
+  void getReports() {
+    _showTravel();
+    int getTravelNumber = _getTravelNumber();
+    getTravelNumber = getTravelNumber - 1;
+    if (travel![getTravelNumber].bus.seatCount == 25) {
+      int reserveCount =
+          _getTravelReserveReport(getTravelNumber: getTravelNumber);
+      int buyCount = _getTravelBuyReport(getTravelNumber: getTravelNumber);
+      int price = travel![getTravelNumber].price;
+      double reservePrice = price * 0.3;
+      reservePrice = reservePrice * reserveCount;
+      int buyPrice = price * buyCount;
+      int totalIncome = buyPrice + reservePrice.toInt();
+      print('total-income:$totalIncome');
+    } else {
+      int reserveCount =
+          _getTravelReserveReport(getTravelNumber: getTravelNumber);
+      int buyCount = _getTravelBuyReport(getTravelNumber: getTravelNumber);
+      int price = travel![getTravelNumber].price;
+      double reservePrice = price * 0.3;
+      reservePrice = reservePrice * reserveCount;
+      int buyPrice = price * buyCount;
+      int totalIncome = buyPrice + reservePrice.toInt();
+      print('total-income:$totalIncome');
+    }
+  }
+
+  int _getTravelReserveReport({required int getTravelNumber}) {
+    int countInCome = 0;
+    if (travel != null) {
+      for (int i = 0; i < travel![getTravelNumber].seats.length; i++) {
+        if (travel![getTravelNumber].seats[i].number == 'R') {
+          countInCome += 1;
+        }
+      }
+    }
+    return countInCome;
+  }
+
+  int _getTravelBuyReport({required int getTravelNumber}) {
+    int countInCome = 0;
+    if (travel != null) {
+      for (int i = 0; i < travel![getTravelNumber].seats.length; i++) {
+        if (travel![getTravelNumber].seats[i].number == 'B') {
+          countInCome += 1;
+        }
+      }
+    }
+    return countInCome;
+  }
+
+  void cancelTicket() {
     _showTravel();
     int getTravelNumber = _getTravelNumber();
     getTravelNumber = getTravelNumber - 1;
@@ -22,26 +73,28 @@ class BusStation {
     if (travel![getTravelNumber].bus.seatCount == 25) {
       _showVipBusSeats(travelNumber: getTravelNumber);
       int seatCancel = _getSeatNumberForCancelVip();
-      int seatCancelNumber =seatCancel;
+      int seatCancelNumber = seatCancel;
       seatCancel = seatCancel - 1;
       Seat seat = busSeats[seatCancel].copyWith(number: '$seatCancelNumber');
-      seat.ticket=null;
-      busSeats[seatCancel]=seat;
+      seat.ticket = null;
+      busSeats[seatCancel] = seat;
     } else {
       _showNormalBusSeats(travelNumber: getTravelNumber);
       int seatCancel = _getSeatNumberForCancelNormal();
-      int seatCancelNumber =seatCancel;
+      int seatCancelNumber = seatCancel;
       seatCancel = seatCancel - 1;
       Seat seat = busSeats[seatCancel].copyWith(number: '$seatCancelNumber');
-      seat.ticket=null;
-      busSeats[seatCancel]=seat;
+      seat.ticket = null;
+      busSeats[seatCancel] = seat;
     }
   }
+
   bool _validateCancelBus({required int cancelSeat}) {
     bool isValid = true;
     if (travel != null) {
       for (int i = 0; i < travel!.length; i++) {
-        if (travel![i].seats[cancelSeat].number == 'B' || travel![i].seats[cancelSeat].number == 'R' ) {
+        if (travel![i].seats[cancelSeat].number == 'B' ||
+            travel![i].seats[cancelSeat].number == 'R') {
           return isValid == false;
         }
       }
@@ -50,6 +103,7 @@ class BusStation {
     }
     return isValid;
   }
+
   int _getSeatNumberForCancelVip() {
     int? getSeatNumberForCancelVip;
     while (true) {
@@ -58,9 +112,9 @@ class BusStation {
       if (getSeatNumberForCancelVip != null &&
           getSeatNumberForCancelVip > 0 &&
           getSeatNumberForCancelVip < 26) {
-        if(_validateCancelBus(cancelSeat: getSeatNumberForCancelVip-1)){
+        if (_validateCancelBus(cancelSeat: getSeatNumberForCancelVip - 1)) {
           print('your seat number is not bought or reserved');
-        }else{
+        } else {
           print('your seat number is canceled');
           return getSeatNumberForCancelVip;
         }
@@ -71,6 +125,7 @@ class BusStation {
     }
     return getSeatNumberForCancelVip;
   }
+
   int _getSeatNumberForCancelNormal() {
     int? getSeatNumberForCancelNormal;
     while (true) {
@@ -79,9 +134,9 @@ class BusStation {
       if (getSeatNumberForCancelNormal != null &&
           getSeatNumberForCancelNormal > 0 &&
           getSeatNumberForCancelNormal < 45) {
-        if(_validateCancelBus(cancelSeat: getSeatNumberForCancelNormal-1)){
+        if (_validateCancelBus(cancelSeat: getSeatNumberForCancelNormal - 1)) {
           print('your seat number is not bought or reserved');
-        }else{
+        } else {
           print('your seat number is canceled');
           return getSeatNumberForCancelNormal;
         }
@@ -93,7 +148,7 @@ class BusStation {
     return getSeatNumberForCancelNormal;
   }
 
-  void previewBus(){
+  void previewBus() {
     _showTravel();
     int getTravelNumber = _getTravelNumber();
     getTravelNumber = getTravelNumber - 1;
@@ -105,7 +160,7 @@ class BusStation {
     }
   }
 
-  void buyTicket(){
+  void buyTicket() {
     _showTravel();
     int getTravelNumber = _getTravelNumber();
     getTravelNumber = getTravelNumber - 1;
@@ -115,19 +170,20 @@ class BusStation {
       int seatBuy = _getSeatNumberForBuyVip();
       seatBuy = seatBuy - 1;
       Seat seat = busSeats[seatBuy].copyWith(number: 'B');
-      Ticket ticket =BuyTicket();
-      seat.ticket=ticket;
-      busSeats[seatBuy]=seat;
+      Ticket ticket = BuyTicket();
+      seat.ticket = ticket;
+      busSeats[seatBuy] = seat;
     } else {
       _showNormalBusSeats(travelNumber: getTravelNumber);
       int seatBuy = _getSeatNumberForBuyNormal();
       seatBuy = seatBuy - 1;
       Seat seat = busSeats[seatBuy].copyWith(number: 'B');
-      Ticket ticket =BuyTicket();
-      seat.ticket=ticket;
-      busSeats[seatBuy]=seat;
+      Ticket ticket = BuyTicket();
+      seat.ticket = ticket;
+      busSeats[seatBuy] = seat;
     }
   }
+
   bool _validateBuyBus({required int seatBuy}) {
     bool isValid = true;
     if (travel != null) {
@@ -141,6 +197,7 @@ class BusStation {
     }
     return isValid;
   }
+
   int _getSeatNumberForBuyVip() {
     int? getSeatNumberForBuyVip;
     while (true) {
@@ -149,9 +206,9 @@ class BusStation {
       if (getSeatNumberForBuyVip != null &&
           getSeatNumberForBuyVip > 0 &&
           getSeatNumberForBuyVip < 26) {
-        if(_validateBuyBus(seatBuy: getSeatNumberForBuyVip-1)){
+        if (_validateBuyBus(seatBuy: getSeatNumberForBuyVip - 1)) {
           return getSeatNumberForBuyVip;
-        }else{
+        } else {
           print('your seat number is bought');
         }
         break;
@@ -161,6 +218,7 @@ class BusStation {
     }
     return getSeatNumberForBuyVip;
   }
+
   int _getSeatNumberForBuyNormal() {
     int? getSeatNumberForBuyNormal;
     while (true) {
@@ -169,9 +227,9 @@ class BusStation {
       if (getSeatNumberForBuyNormal != null &&
           getSeatNumberForBuyNormal > 0 &&
           getSeatNumberForBuyNormal < 45) {
-        if(_validateBuyBus(seatBuy: getSeatNumberForBuyNormal-1)){
+        if (_validateBuyBus(seatBuy: getSeatNumberForBuyNormal - 1)) {
           return getSeatNumberForBuyNormal;
-        }else{
+        } else {
           print('your seat number is bought');
         }
         break;
@@ -181,7 +239,6 @@ class BusStation {
     }
     return getSeatNumberForBuyNormal;
   }
-
 
   void reserveTicket() {
     _showTravel();
@@ -194,20 +251,20 @@ class BusStation {
       int seatReserve = _getSeatNumberForReserveVip();
       seatReserve = seatReserve - 1;
       Seat seat = busSeats[seatReserve].copyWith(number: 'R');
-      Ticket ticket =ReserveTicket();
-      seat.ticket=ticket;
-      busSeats[seatReserve]=seat;
-
+      Ticket ticket = ReserveTicket();
+      seat.ticket = ticket;
+      busSeats[seatReserve] = seat;
     } else {
       _showNormalBusSeats(travelNumber: getTravelNumber);
       int seatReserve = _getSeatNumberForReserveNormal();
       seatReserve = seatReserve - 1;
       Seat seat = busSeats[seatReserve].copyWith(number: 'R');
-      Ticket ticket =ReserveTicket();
-      seat.ticket=ticket;
-      busSeats[seatReserve]=seat;
+      Ticket ticket = ReserveTicket();
+      seat.ticket = ticket;
+      busSeats[seatReserve] = seat;
     }
   }
+
   bool _validateReserveBus({required int seatReserve}) {
     bool isValid = true;
     if (travel != null) {
@@ -221,6 +278,7 @@ class BusStation {
     }
     return isValid;
   }
+
   int _getSeatNumberForReserveVip() {
     int? getSeatNumberForReserveVip;
     while (true) {
@@ -229,9 +287,9 @@ class BusStation {
       if (getSeatNumberForReserveVip != null &&
           getSeatNumberForReserveVip > 0 &&
           getSeatNumberForReserveVip < 26) {
-        if(_validateReserveBus(seatReserve: getSeatNumberForReserveVip-1)){
+        if (_validateReserveBus(seatReserve: getSeatNumberForReserveVip - 1)) {
           return getSeatNumberForReserveVip;
-        }else{
+        } else {
           print('your seat number is reserved');
         }
         break;
@@ -241,6 +299,7 @@ class BusStation {
     }
     return getSeatNumberForReserveVip;
   }
+
   int _getSeatNumberForReserveNormal() {
     int? getSeatNumberForReserveNormal;
     while (true) {
@@ -249,9 +308,10 @@ class BusStation {
       if (getSeatNumberForReserveNormal != null &&
           getSeatNumberForReserveNormal > 0 &&
           getSeatNumberForReserveNormal < 45) {
-        if(_validateReserveBus(seatReserve: getSeatNumberForReserveNormal-1)){
+        if (_validateReserveBus(
+            seatReserve: getSeatNumberForReserveNormal - 1)) {
           return getSeatNumberForReserveNormal;
-        }else{
+        } else {
           print('your seat number is reserved');
         }
         break;
@@ -307,6 +367,7 @@ class BusStation {
       stdout.write('\n');
     }
   }
+
   void _showVipBusSeats({required int travelNumber}) {
     final List<Seat> busSeats = travel![travelNumber].seats;
     int count = -1;
@@ -352,7 +413,7 @@ class BusStation {
     while (true) {
       print('Please enter your travel number');
       getTravelNumber = int.tryParse(stdin.readLineSync() ?? ' ');
-      if (getTravelNumber != null && getTravelNumber >0 ) {
+      if (getTravelNumber != null && getTravelNumber > 0) {
         break;
       } else {
         print('enter the number valid number');
@@ -364,11 +425,18 @@ class BusStation {
   void _showTravel() {
     for (int i = 0; i < travel!.length; i++) {
       int number = i;
-      number+=1;
+      number += 1;
       String travelDetails = travel![i].travelDetails;
       String busName = buses![i].name;
       int price = travel![i].price;
-      print({'$number:''travel-detail:$travelDetails'' ''bus-name:$busName'' ''bus-price:$price'});
+      print({
+        '$number:'
+            'travel-detail:$travelDetails'
+            ' '
+            'bus-name:$busName'
+            ' '
+            'bus-price:$price'
+      });
     }
   }
 
@@ -420,7 +488,7 @@ class BusStation {
     while (true) {
       print('Please enter your bus number');
       getBusNumber = int.tryParse(stdin.readLineSync() ?? ' ');
-      if (getBusNumber != null && getBusNumber >0) {
+      if (getBusNumber != null && getBusNumber > 0) {
         break;
       } else {
         print('enter the number valid number');
@@ -432,9 +500,9 @@ class BusStation {
   void _showBus() {
     for (int i = 0; i < buses!.length; i++) {
       int number = i;
-      number+=1;
+      number += 1;
       String busName = buses![i].name;
-      print({'$number:''bus-name:''$busName'});
+      print({'$number:' 'bus-name:' '$busName'});
     }
   }
 
@@ -456,7 +524,7 @@ class BusStation {
     while (true) {
       print('Please enter your bus price:');
       getPrice = double.tryParse(stdin.readLineSync() ?? ' ');
-      if (getPrice != null && getPrice > 0 ) {
+      if (getPrice != null && getPrice > 0) {
         break;
       } else {
         print('enter the valid price');

@@ -1,5 +1,3 @@
-
-
 abstract class Ticket {
   final double payPercent;
   final double cancelPercent;

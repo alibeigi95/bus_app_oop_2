@@ -1,5 +1,3 @@
-
-
 abstract class Bus {
   final String name;
   final int seatCount;
@@ -7,5 +5,4 @@ abstract class Bus {
 
   const Bus(
       {required this.name, required this.seatCount, required this.priceFactor});
-
 }

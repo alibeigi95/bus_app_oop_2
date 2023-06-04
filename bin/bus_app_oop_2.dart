@@ -5,10 +5,12 @@ import 'dart:io';
 BusStation busStation = BusStation(buses: [], travel: []);
 
 void main(List<String> arguments) {
-
   while (true) {
     MenuOperations busMenu = getMenu();
     mainMenu(menu: busMenu);
+    if (busMenu.title == 'exit') {
+      break;
+    }
   }
 }
 
@@ -33,8 +35,6 @@ MenuOperations getMenu() {
 }
 
 void mainMenu({required MenuOperations menu}) {
-
-
   switch (menu) {
     case MenuOperations.insertBus:
       busStation.addBuses();
@@ -56,7 +56,7 @@ void mainMenu({required MenuOperations menu}) {
       busStation.cancelTicket();
       break;
     case MenuOperations.getReports:
-      print(menu.title);
+      busStation.getReports();
       break;
     case MenuOperations.exit:
       break;
