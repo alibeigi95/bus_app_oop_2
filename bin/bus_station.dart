@@ -152,7 +152,6 @@ class BusStation {
     _showTravel();
     int getTravelNumber = _getTravelNumber();
     getTravelNumber = getTravelNumber - 1;
-
     if (travel![getTravelNumber].bus.seatCount == 25) {
       _showVipBusSeats(travelNumber: getTravelNumber);
     } else {
@@ -245,7 +244,6 @@ class BusStation {
     int getTravelNumber = _getTravelNumber();
     getTravelNumber = getTravelNumber - 1;
     List<Seat> busSeats = travel![getTravelNumber].seats;
-
     if (travel![getTravelNumber].bus.seatCount == 25) {
       _showVipBusSeats(travelNumber: getTravelNumber);
       int seatReserve = _getSeatNumberForReserveVip();
@@ -423,20 +421,24 @@ class BusStation {
   }
 
   void _showTravel() {
-    for (int i = 0; i < travel!.length; i++) {
-      int number = i;
-      number += 1;
-      String travelDetails = travel![i].travelDetails;
-      String busName = buses![i].name;
-      int price = travel![i].price;
-      print({
-        '$number:'
-            'travel-detail:$travelDetails'
-            ' '
-            'bus-name:$busName'
-            ' '
-            'bus-price:$price'
-      });
+    if (travel != null) {
+      for (int i = 0; i < travel!.length; i++) {
+        int number = i;
+        number += 1;
+        String travelDetails = travel![i].travelDetails;
+        String busName = buses![i].name;
+        int price = travel![i].price;
+        print({
+          '$number:'
+              'travel-detail:$travelDetails'
+              ' '
+              'bus-name:$busName'
+              ' '
+              'bus-price:$price'
+        });
+      }
+    } else {
+      print('there is no travel is added');
     }
   }
 
@@ -498,11 +500,15 @@ class BusStation {
   }
 
   void _showBus() {
-    for (int i = 0; i < buses!.length; i++) {
-      int number = i;
-      number += 1;
-      String busName = buses![i].name;
-      print({'$number:' 'bus-name:' '$busName'});
+    if (buses != null) {
+      for (int i = 0; i < buses!.length; i++) {
+        int number = i;
+        number += 1;
+        String busName = buses![i].name;
+        print({'$number:' 'bus-name:' '$busName'});
+      }
+    } else {
+      print('no buses is added');
     }
   }
 
@@ -511,7 +517,9 @@ class BusStation {
       String? travelDetails;
       print('enter your travel details ');
       travelDetails = stdin.readLineSync();
-      if (travelDetails != null) {
+      if (travelDetails != null &&
+          travelDetails != '' &&
+          travelDetails != ' ') {
         return travelDetails;
       } else {
         print('enter the valid travel details');
@@ -562,7 +570,7 @@ class BusStation {
       String? busName;
       print('enter your bus name:');
       busName = stdin.readLineSync();
-      if (busName != null) {
+      if (busName != null && busName != '' && busName != ' ') {
         if (_validateBusName(name: busName)) {
           return busName;
         } else {
