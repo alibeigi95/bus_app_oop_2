@@ -500,7 +500,7 @@ class BusStation {
   }
 
   void _showBus() {
-    if (buses != null) {
+    if (buses!.isEmpty) {
       for (int i = 0; i < buses!.length; i++) {
         int number = i;
         number += 1;
